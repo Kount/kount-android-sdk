@@ -40,7 +40,10 @@ protected void onCreate(Bundle savedInstanceState) {
   DataCollector.getInstance().setContext(this);
   DataCollector.getInstance().setMerchantID(<MERCHANT_ID>);
   DataCollector.getInstance().setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
+  // For Test Environment
   DataCollector.getInstance().setEnvironment(DataCollector.ENVIRONMENT_TEST);
+  // For Production Environment
+  // DataCollector.getInstance().setEnvironment(DataCollector.ENVIRONMENT_PRODUCTION);
   ...
 }
 ```
