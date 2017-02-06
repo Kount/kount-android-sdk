@@ -19,6 +19,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
+    static final int MERCHANT_ID = 900900; // Insert your valid merchant ID
+    static final int ENVIRONMENT = DataCollector.ENVIRONMENT_TEST;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setTitle("Sample");
 
-        final int MERCHANT_ID = 0; // Insert your valid merchant ID
-        final int ENVIRONMENT = DataCollector.ENVIRONMENT_TEST;
-
         // Check for location permissions so the Data Collector can gather the device location
         requestLocationPermissions();
-
-        // Configure the collector
-        DataCollector.getInstance().setDebug(true);
-        DataCollector.getInstance().setContext(this);
-        DataCollector.getInstance().setMerchantID(MERCHANT_ID);
-        DataCollector.getInstance().setEnvironment(ENVIRONMENT);
-        DataCollector.getInstance().setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
 
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);

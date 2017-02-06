@@ -1,5 +1,7 @@
 package com.kount.checkoutexample;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -20,19 +22,32 @@ public class CollectionActivity extends AppCompatActivity {
         textArea.append("Collection Starting\n\n");
 
         String sessionID = UUID.randomUUID().toString();
-        sessionID = sessionID.replace("-", "");
+        final String deviceSessionID = sessionID.replace("-", "");
         textArea.append("Session ID:\n" + sessionID + "\n\n");
 
-        DataCollector.getInstance().collectForSession(sessionID, new DataCollector.CompletionHandler() {
-            @Override
-            public void completed(String s) {
-                textArea.append("Collection Completed");
-            }
+        // Configure the collector
+        final DataCollector dataCollector = com.kount.api.DataCollector.getInstance();
+        dataCollector.setDebug(true);
+        dataCollector.setContext(this);
+        dataCollector.setMerchantID(MainActivity.MERCHANT_ID);
+        dataCollector.setEnvironment(MainActivity.ENVIRONMENT);
+        dataCollector.setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
 
-            @Override
-            public void failed(String s, final DataCollector.Error error) {
-                textArea.append("Collection Failed\n\n");
-                textArea.append(error.toString());
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            public void run() {
+                dataCollector.collectForSession(deviceSessionID, new com.kount.api.DataCollector.CompletionHandler() {
+                    @Override
+                    public void completed(String s) {
+                        textArea.append("Collection Completed");
+                    }
+
+                    @Override
+                    public void failed(String s, final DataCollector.Error error) {
+                        textArea.append("Collection Failed\n\n");
+                        textArea.append(error.toString());
+                    }
+
+                });
             }
         });
     }
