@@ -77,10 +77,19 @@ if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCA
 
 ## Collection
 
-Early in the checkout process you'll want to start the data collection
-with a unique session ID tied to the transaction, and collect once per unique session ID. For example, in the
-onCreate method of an activity early in your transaction workflow, add
-the following:
+Early in the checkout process, start the data collection with a unique 
+session ID tied to the transaction, and collect once per unique session
+ID.
+
+**NOTE:** Only run collection during the checkout process (and the call
+should be made early in the collection process). Calling collection
+outside of the checkout process may result in a high proportion of 
+collection to RIS calls. This may be misinterpreted by our services as a
+DDOS attack. While this is rare, we highlight this to emphasize the
+importance that collection only be placed at the beginning of the
+checkout process.
+
+Below is an example adding the controller to the onCreate method:
 
 ``` 
 import com.kount.api.DataCollector;
@@ -130,3 +139,5 @@ upgrade to version 3.x:
     and replace it with the collect method on the DataCollector
     singleton, and optionally implement the completion
     handler interface.
+-   Be certain that the call to collect is made at the beginning of 
+    the checkout process. 
