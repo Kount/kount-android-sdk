@@ -11,6 +11,8 @@ your Android app.
     SDK](http://developer.android.com/sdk/index.html)
 -   Target Android SDK &gt;= 10
 
+NOTE:  The Kount Android SDK is intended for installed Android Apps - due to the restrictions imposed on Instant Apps by Android, this SDK will not execute properly with Instant Apps.   
+
 ## Installation
 
 Download the [Kount Android
