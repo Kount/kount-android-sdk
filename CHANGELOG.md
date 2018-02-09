@@ -1,5 +1,11 @@
 # Android SDK Release Notes
 
+## 3.3
+* Added support for Instant Apps.
+Note: Due to Android restrictions; Instant App Collection may be degraded compared to a full, installed Android App.
+* Improved LocationCollector process
+* Improved reporting of errors and timeouts
+
 ## 3.2
 * Significantly reduced collection time
 * Bugfixes for LocationCollector
