@@ -10,9 +10,9 @@ your Android app.
 -   [Android Studio and Android
     SDK](http://developer.android.com/sdk/index.html)
 -   Target Android SDK &gt;= 10
--   Instant App support dependency (if using version 3.3.0 and higher).  You must included the Instant App libraries at compile time if you are not building a Instant App.(see Instant App Dependencies below for more information)
+-   Instant App support dependency (if using version 3.3.0 and higher). You must include the Instant App library at compile time; even if you are not building an Instant App (see Instant App Dependencies below for more information)
 
-NOTE: Due to the restrictions imposed on Instant Apps by Android, collection may be degraded compared to a full, installed Android App.
+NOTE: Due to the restrictions imposed on Instant Apps by Android, Instant App collection may be degraded compared to a full Android App.
 
 ## Installation
 
@@ -148,7 +148,7 @@ upgrade to version 3.x:
     
 ## Instant App dependencies
 
-If your application is not also an Instant App, then you will need to include the Instant App library during compile time to your project.  This can be done in Android studio by adding the following likn in your module's gradle file under the dependency section:
+If your application is not also an Instant App, you will need to include the Instant App library during compile time to your project. This can be done in Android Studio by adding the following line in your module's gradle file under the dependency section:
 
 ```
 dependencies {
@@ -156,4 +156,3 @@ dependencies {
 ...
 }
 ```
-
