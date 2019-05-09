@@ -12,7 +12,7 @@ your Android app.
 -   Target Android SDK &gt;= 10
 -   Instant App support dependency (if using version 3.3.0 and higher). You must include the Instant App library at compile time; even if you are not building an Instant App (see Instant App Dependencies below for more information)
 
-NOTE: Due to the restrictions imposed on Instant Apps by Android, Instant App collection may be degraded compared to a full Android App.
+NOTE: Due to the restrictions imposed on Instant Apps by Android, Instant App collection may be degraded compared to a full Android App. The current Android Mobile SDK does not support anything below (or earlier than) v4.4.2.
 
 ## Installation
 
