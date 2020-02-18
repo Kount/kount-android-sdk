@@ -9,8 +9,8 @@ Enhancements to the Android SDK for Kount customers including:
 * Security and Bug fixes
 
 Kount's Android SDK is compatible with:
-* Minumum Versions of Android SDK: 
-* Recommended Target Version of Android SDK:
+* Minumum Version of Android OS: 
+* Recommended Target Version of Android OS:
 * Kount Recommends clients to include Google Play Store libraries if client app does not already.
 * Tested on the following Android OS Verstions:
   * ???
