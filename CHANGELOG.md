@@ -4,7 +4,7 @@
 Enhancements to the Android SDK for Kount customers including:
 * City Level location information
 * Enhanced timing metrics
-* iOS 13 updates
+* Android X updates
 * Security and Bug fixes
 
 ## 3.3
