@@ -1,5 +1,12 @@
 # Android SDK Release Notes
 
+## 4.0.0
+Enhancements to the Android SDK for Kount customers including:
+* City Level location information
+* Enhanced timing metrics
+* iOS 13 updates
+* Security and Bug fixes
+
 ## 3.3
 * Added support for Instant Apps.
 Note: Due to Android restrictions; Instant App Collection may be degraded compared to a full, installed Android App.
