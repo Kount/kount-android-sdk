@@ -3,9 +3,17 @@
 ## 4.0.0
 Enhancements to the Android SDK for Kount customers including:
 * City Level location information
+* Utilizes Play Store libraries if available.
 * Enhanced timing metrics
 * Android X updates
 * Security and Bug fixes
+
+Kount's Android SDK is compatible with:
+* Minumum Versions of Android SDK: 
+* Recommended Target Version of Android SDK:
+* Kount Recommends clients to include Google Play Store libraries if client app does not already.
+* Tested on the following Android OS Verstions:
+  * ???
 
 ## 3.3
 * Added support for Instant Apps.
