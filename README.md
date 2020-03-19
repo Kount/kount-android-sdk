@@ -9,7 +9,7 @@ your Android app.
 -   [Kount integration](http://www.kount.com/fraud-detection-software)
 -   [Android Studio and Android
     SDK](http://developer.android.com/sdk/index.html)
--   Target Android SDK &gt;= 10
+-   Target Android SDK &gt;= 28 (Android 9)  Android X is recommended
 -   Instant App support dependency (if using version 3.3.0 and higher). You must include the Instant App library at compile time; even if you are not building an Instant App (see Instant App Dependencies below for more information)
 
 NOTE: Due to the restrictions imposed on Instant Apps by Android, Instant App collection may be degraded compared to a full Android App. The current Android Mobile SDK does not support anything below (or earlier than) v4.4.2.
@@ -120,39 +120,6 @@ Open the `CheckoutExample` folder in Android Studio to see a simple
 example of using the SDK.
 
 
-## Migrating to version 4.X
-
-Versions 4.X uses Android X libraries, and requires that you set your
-minimum SDK to API 28 (Android 9).  Kount recommends using Android X or
-newer.
-
-## Migrating to version 3.x 
-
-The interface and workflow of the SDK has changed between version 2 and
-version 3. The old version would have you create an instance of the Data
-Collector, configure it, make a call to collect, and then implement the
-listener methods if you wished to receive feedback regarding the
-collection.
-
-With the new version, the Data Collector is implemented as a singleton
-and is configured when your main activity is created. The collect call
-is now a method on the Data Collector singleton and has an optional
-completion handler interface argument you can implement if you wish to
-get additional information on the collection. Here are the steps to
-upgrade to version 3.x:
-
--   Remove the old library from your project and replace it with the
-    new library.
--   Remove the old initialization code and replace it with the new
-    initialization code methods on the DataCollector singleton in your
-    main activity.
--   Remove the old call to collect and corresponding listener methods
-    and replace it with the collect method on the DataCollector
-    singleton, and optionally implement the completion
-    handler interface.
--   Be certain that the call to collect is made at the beginning of 
-    the checkout process. 
-    
 ## Instant App dependencies
 
 If your application is not also an Instant App, you will need to include the Instant App library during compile time to your project. This can be done in Android Studio by adding the following line in your module's gradle file under the dependency section:
