@@ -116,8 +116,15 @@ protected void onCreate(Bundle savedInstanceState) {
 
 ## Example
 
-Open the `CheckoutExample` folder in Android Studio to see a simple example of using the SDK.
+Open the `CheckoutExample` folder in Android Studio to see a simple 
+example of using the SDK.
 
+
+## Migrating to version 4.X
+
+Versions 4.X uses Android X libraries, and requires that you set your
+minimum SDK to API 28 (Android 9).  Kount recommends using Android X or
+newer.
 
 ## Migrating to version 3.x 
 
