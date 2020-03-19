@@ -9,11 +9,11 @@ Enhancements to the Android SDK for Kount customers including:
 * Security and Bug fixes
 
 Kount's Android SDK is compatible with:
-* Minumum Version of Android OS: 
-* Recommended Target Version of Android OS:
+* Minumum Version of Android OS: API 28 (Android 9) 
+* Recommended Target Version of Android OS: Android X
 * Kount Recommends clients to include Google Play Store libraries if client app does not already.
 * Tested on the following Android OS Verstions:
-  * ???
+  * Android 9 & 10
 
 ## 3.3
 * Added support for Instant Apps.
