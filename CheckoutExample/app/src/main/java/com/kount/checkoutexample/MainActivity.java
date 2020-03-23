@@ -20,7 +20,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
-    static final int MERCHANT_ID = 900431; // Insert your valid merchant ID
+    static final int MERCHANT_ID = 0; // Insert your valid merchant ID
     static final int ENVIRONMENT = DataCollector.ENVIRONMENT_TEST;
 
     @Override
