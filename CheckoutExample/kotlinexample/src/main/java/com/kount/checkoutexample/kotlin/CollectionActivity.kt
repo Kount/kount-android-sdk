@@ -33,7 +33,7 @@ class CollectionActivity : AppCompatActivity() {
                 }
 
                 override fun failed(s: String?, error: DataCollector.Error?) {
-                    textarea.append("Collection Failed:\n\n $s " + (error?.description ?: "none"))
+                    textarea.append("Collection Failed:\n\n " + (error?.description ?: "none"))
                 }
 
             })

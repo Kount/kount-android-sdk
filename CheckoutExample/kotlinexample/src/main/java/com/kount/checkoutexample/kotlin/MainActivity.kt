@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val ENVIRONMENT: Int = DataCollector.ENVIRONMENT_TEST
 
     companion object Cons {
-        val MERCHANT_ID = 99999 // Insert your valid merchant ID
+        val MERCHANT_ID = 0 // Insert your valid merchant ID
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
