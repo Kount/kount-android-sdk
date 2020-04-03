@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CheckoutExample.iml" filepath="$PROJECT_DIR$/CheckoutExample.iml" group="CheckoutExample" />
+      <module fileurl="file://$PROJECT_DIR$/app/CheckoutExample-app.iml" filepath="$PROJECT_DIR$/app/CheckoutExample-app.iml" group="CheckoutExample/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="CheckoutExample/app" />
+      <module fileurl="file://$PROJECT_DIR$/kount-android-sdk-CheckoutExample.iml" filepath="$PROJECT_DIR$/kount-android-sdk-CheckoutExample.iml" group="CheckoutExample" />
     </modules>
   </component>
 </project>
