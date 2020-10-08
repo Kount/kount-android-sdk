@@ -14,14 +14,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.kount.api.DataCollector;
+import com.kount.api.analytics.AnalyticsCollector;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
-    static final int MERCHANT_ID = 0; // Insert your valid merchant ID
-    static final int ENVIRONMENT = DataCollector.ENVIRONMENT_TEST;
+    static final int MERCHANT_ID = 999999; // Insert your valid merchant ID
+    static final int ENVIRONMENT = AnalyticsCollector.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for location permissions so the Data Collector can gather the device location
         requestLocationPermissions();
+
+        AnalyticsCollector.setMerchantId(MERCHANT_ID);
+        // This turns the alpha collections on(true)/off(false). It defaults to true
+        AnalyticsCollector.collectAnalytics(true);
+        AnalyticsCollector.setEnvironment(ENVIRONMENT);
 
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);

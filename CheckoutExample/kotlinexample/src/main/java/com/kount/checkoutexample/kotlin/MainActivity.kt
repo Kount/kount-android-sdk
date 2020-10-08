@@ -9,14 +9,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kount.api.DataCollector
+import com.kount.api.analytics.AnalyticsCollector
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val PERMISSIONS_REQUEST_LOCATION = 0
-    private val ENVIRONMENT: Int = DataCollector.ENVIRONMENT_TEST
+    private val ENVIRONMENT: Int = AnalyticsCollector.ENVIRONMENT_TEST//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
+
 
     companion object Cons {
-        val MERCHANT_ID = 0 // Insert your valid merchant ID
+        val MERCHANT_ID = 999999 // Insert your valid merchant ID
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         title = "Sample"
 
+        // Check for location permissions so the Data Collector can gather the device location
         requestLocationPermissions()
+
+        AnalyticsCollector.setMerchantId(MERCHANT_ID)
+        //This turns the alpha collections on(true)/off(false). It defaults to true
+        AnalyticsCollector.collectAnalytics(true)
+        AnalyticsCollector.setEnvironment(ENVIRONMENT)
 
         merchant.text = "$MERCHANT_ID"
         when (ENVIRONMENT) {
