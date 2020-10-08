@@ -1,5 +1,10 @@
 # Android SDK Release Notes
 
+## 4.1.0
+
+* Added new UI element collection capabilities for analytics
+* Minimum Version on Android API: 20 (JellyBean)
+
 ## 4.0.0
 Enhancements to the Android SDK for Kount customers including:
 * City Level location information
