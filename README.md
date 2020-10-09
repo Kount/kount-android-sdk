@@ -17,4 +17,4 @@ NOTE: Due to the restrictions imposed on Instant Apps by Android, Instant App co
 ## Installation
 
 Download the [Kount Android
-SDK](https://github.com/Kount/kount-android-sdk) and then go to the [Kount support article] (https://support.kount.com/hc/en-us/articles/360050315672-How-to-Integrate-the-Kount-SDK-into-an-Android-App) for full installatioon instructions.
+SDK](https://github.com/Kount/kount-android-sdk), and then go to the [Kount support article](https://support.kount.com/hc/en-us/articles/360050315672-How-to-Integrate-the-Kount-SDK-into-an-Android-App) for full set of installation instructions.
