@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.kount.api.DataCollector;
 import com.kount.api.analytics.AnalyticsCollector;
 
 import java.util.Locale;
@@ -45,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
         merchant.setText(String.format(Locale.US, "%d", MERCHANT_ID));
         switch (ENVIRONMENT) {
-            case DataCollector.ENVIRONMENT_TEST:
+            case AnalyticsCollector.ENVIRONMENT_TEST:
                 environment.setText("Test");
                 break;
-            case DataCollector.ENVIRONMENT_PRODUCTION:
+            case AnalyticsCollector.ENVIRONMENT_PRODUCTION:
                 environment.setText("Production");
                 break;
             default:

@@ -1,15 +1,12 @@
 package com.kount.checkoutexample;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kount.api.DataCollector;
-
-import java.util.UUID;
+import com.kount.api.analytics.AnalyticsCollector;
+import com.kount.api.analytics.DeviceDataCollector;
 
 public class CollectionActivity extends AppCompatActivity {
 
@@ -19,37 +16,14 @@ public class CollectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_collection);
         setTitle("Checkout Page");
 
-        final TextView textArea = (TextView) findViewById(R.id.textarea);
-        textArea.append("Collection Starting\n\n");
+        final TextView textArea = findViewById(R.id.textarea);
+        final String deviceSessionID = AnalyticsCollector.getSessionId();
+        textArea.append("Session ID:\n" + deviceSessionID + "\n\n");
 
-        String sessionID = UUID.randomUUID().toString();
-        final String deviceSessionID = sessionID.replace("-", "");
-        textArea.append("Session ID:\n" + sessionID + "\n\n");
-
-        // Configure the collector
-        final DataCollector dataCollector = com.kount.api.DataCollector.getInstance();
-        dataCollector.setDebug(true);
-        dataCollector.setContext(this);
-        dataCollector.setMerchantID(MainActivity.MERCHANT_ID);
-        dataCollector.setEnvironment(MainActivity.ENVIRONMENT);
-        dataCollector.setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT);
-
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            public void run() {
-                dataCollector.collectForSession(deviceSessionID, new com.kount.api.DataCollector.CompletionHandler() {
-                    @Override
-                    public void completed(String s) {
-                        textArea.append("Collection Completed");
-                    }
-
-                    @Override
-                    public void failed(String s, final DataCollector.Error error) {
-                        textArea.append("Collection Failed\n\n");
-                        textArea.append(error.toString());
-                    }
-
-                });
-            }
-        });
+        DeviceDataCollector.CollectionStatus status = AnalyticsCollector.getCollectionStatus();
+        textArea.append("Collection Status: " + status + "\n");
+        if (status == DeviceDataCollector.CollectionStatus.FAILED) {
+            textArea.append("Error: " + status.getError());
+        }
     }
 }
