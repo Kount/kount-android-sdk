@@ -1,11 +1,10 @@
 package com.kount.checkoutexample.kotlin
 
 import android.os.Bundle
-import android.os.Handler
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.kount.api.DataCollector
-import kotlinx.android.synthetic.main.activity_collection.*
-import java.util.*
+import com.kount.api.analytics.AnalyticsCollector
+import com.kount.api.analytics.DeviceDataCollector
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -14,29 +13,14 @@ class CollectionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_collection)
         title = "Checkout Page"
 
-        textarea.append("Collection Starting\n\n")
-        val sessionID = UUID.randomUUID().toString()
-        val deviceSessionID = sessionID.replace("-", "")
-        textarea.append("Session ID:\n$sessionID\n\n")
+        val textArea = findViewById<TextView>(R.id.textarea)
+        val deviceSessionID = AnalyticsCollector.getSessionId()
+        textArea.append("Session ID:\n$deviceSessionID\n\n")
 
-        val dataCollector: DataCollector = DataCollector.getInstance()
-        dataCollector.setDebug(true)
-        dataCollector.setContext(this)
-        dataCollector.setMerchantID(MainActivity.MERCHANT_ID)
-        dataCollector.setEnvironment(DataCollector.ENVIRONMENT_TEST)
-        dataCollector.setLocationCollectorConfig(DataCollector.LocationConfig.COLLECT)
-
-        Handler().post {
-            dataCollector.collectForSession(deviceSessionID, object : DataCollector.CompletionHandler {
-                override fun completed(s: String?) {
-                    textarea.append("Collection Completed")
-                }
-
-                override fun failed(s: String?, error: DataCollector.Error?) {
-                    textarea.append("Collection Failed:\n\n " + (error?.description ?: "none"))
-                }
-
-            })
+        val status = AnalyticsCollector.getCollectionStatus()
+        textArea.append("Collection Status: $status\n\n")
+        if (status == DeviceDataCollector.CollectionStatus.FAILED) {
+            textArea.append("Error: " + status.getError()?.description)
         }
     }
 }

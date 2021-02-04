@@ -8,7 +8,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.kount.api.DataCollector
 import com.kount.api.analytics.AnalyticsCollector
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,8 +35,8 @@ class MainActivity : AppCompatActivity() {
 
         merchant.text = "$MERCHANT_ID"
         when (ENVIRONMENT) {
-            DataCollector.ENVIRONMENT_TEST -> environment.text = "Test"
-            DataCollector.ENVIRONMENT_PRODUCTION -> environment.text = "Production"
+            AnalyticsCollector.ENVIRONMENT_TEST -> environment.text = "Test"
+            AnalyticsCollector.ENVIRONMENT_PRODUCTION -> environment.text = "Production"
 
             else -> environment.text = "Unknown"
         }
