@@ -1,6 +1,7 @@
 package com.kount.checkoutexample;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -16,12 +18,14 @@ import androidx.core.content.ContextCompat;
 import com.kount.api.analytics.AnalyticsCollector;
 
 import java.util.Locale;
+import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    final int PERMISSIONS_REQUEST_LOCATION = 0;
     static final int MERCHANT_ID = 999999; // Insert your valid merchant ID
     static final int ENVIRONMENT = AnalyticsCollector.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
+    static String deviceSessionID = "";
+    private String KEY_UUID = "UUID";
 
 
     @Override
@@ -29,15 +33,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Sample");
+        initView();
 
-        // Check for location permissions so the Data Collector can gather the device location
-        requestLocationPermissions();
-
+        //required section
         AnalyticsCollector.setMerchantId(MERCHANT_ID);
+        //end required section
+
         // This turns the alpha collections on(true)/off(false). It defaults to true
         AnalyticsCollector.collectAnalytics(true);
+
+        // For production you need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
         AnalyticsCollector.setEnvironment(ENVIRONMENT);
 
+        //Optional SessionID section
+        /** If you want to pass in a self generated sessionID(or one given to you by your servers)
+         * you can set it using colde like this. Otherwise the AnalyticsCollector will generate one
+         * for you.Make sure you set session id only one time in a user session.
+         * To do so set your sessionID below.*/
+        if (savedInstanceState == null) {
+            deviceSessionID = UUID.randomUUID().toString();
+            AnalyticsCollector.setSessionId(deviceSessionID);
+        } else {
+            deviceSessionID = savedInstanceState.getString(KEY_UUID);
+            AnalyticsCollector.setSessionId(deviceSessionID);
+        }
+        // END OPTIONAL SESSION_ID SECTION
+
+        //Request location permission for Android 6.0 & above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            requestLocationPermissions(this);
+        else
+            AnalyticsCollector.collectDeviceDataForSession(this);
+
+
+    }
+
+    private void initView() {
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);
         final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
@@ -63,22 +94,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void requestLocationPermissions() {
+    void requestLocationPermissions(Activity activity) {
         final TextView location = (TextView) findViewById(R.id.location);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-                }
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, AnalyticsCollector.REQUEST_PERMISSION_LOCATION);
             } else {
-                location.setText("Allowed");
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, AnalyticsCollector.REQUEST_PERMISSION_LOCATION);
             }
         } else {
-            // The permissions are allowed by default if installed on a device with a OS less than M
+            //This block executes when permission is already granted.
+            AnalyticsCollector.collectDeviceDataForSession(activity);
             location.setText("Allowed");
         }
     }
@@ -86,13 +113,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         final TextView location = (TextView) findViewById(R.id.location);
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
+        if (requestCode == AnalyticsCollector.REQUEST_PERMISSION_LOCATION) {
+            //this block executes when a user grant/deny the permission
+            AnalyticsCollector.collectDeviceDataForSession(this);
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 location.setText("Allowed");
             } else {
                 location.setText("Denied");
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(KEY_UUID, deviceSessionID);
     }
 
 }
