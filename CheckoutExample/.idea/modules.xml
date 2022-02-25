@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Books-kount-android-sdk-CheckoutExample.iml" filepath="$PROJECT_DIR$/.idea/modules/Books-kount-android-sdk-CheckoutExample.iml" group="CheckoutExample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/Books-kount-android-sdk-CheckoutExample-kotlinexample.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/Books-kount-android-sdk-CheckoutExample-kotlinexample.iml" group="CheckoutExample/kotlinexample" />
-      <module fileurl="file://$PROJECT_DIR$/CheckoutExample.iml" filepath="$PROJECT_DIR$/CheckoutExample.iml" group="CheckoutExample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample-app.iml" group="CheckoutExample/app" />
-      <module fileurl="file://$PROJECT_DIR$/kotlinexample/CheckoutExample-kotlinexample.iml" filepath="$PROJECT_DIR$/kotlinexample/CheckoutExample-kotlinexample.iml" group="CheckoutExample/kotlinexample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Git-kount-sdk-kount-android-sdk-CheckoutExample.iml" filepath="$PROJECT_DIR$/.idea/modules/Git-kount-sdk-kount-android-sdk-CheckoutExample.iml" group="CheckoutExample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Git-kount-sdk-kount-android-sdk-CheckoutExample-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Git-kount-sdk-kount-android-sdk-CheckoutExample-app.iml" group="CheckoutExample/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/Git-kount-sdk-kount-android-sdk-CheckoutExample-kotlinexample.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/Git-kount-sdk-kount-android-sdk-CheckoutExample-kotlinexample.iml" group="CheckoutExample/kotlinexample" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="CheckoutExample/app" />
-      <module fileurl="file://$PROJECT_DIR$/kotlinexample/kotlinexample.iml" filepath="$PROJECT_DIR$/kotlinexample/kotlinexample.iml" group="CheckoutExample/kotlinexample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kount-android-sdk-CheckoutExample.iml" filepath="$PROJECT_DIR$/.idea/modules/kount-android-sdk-CheckoutExample.iml" group="CheckoutExample" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kount-android-sdk-CheckoutExample-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kount-android-sdk-CheckoutExample-app.iml" group="CheckoutExample/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/kount-android-sdk-CheckoutExample-kotlinexample.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/kount-android-sdk-CheckoutExample-kotlinexample.iml" group="CheckoutExample/kotlinexample" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CheckoutExample.iml" filepath="$PROJECT_DIR$/.idea/modules/CheckoutExample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml" />
     </modules>
   </component>
 </project>
