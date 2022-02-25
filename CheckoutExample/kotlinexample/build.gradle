@@ -37,7 +37,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.instantapps:instantapps:1.1.0'
 
+    implementation 'com.google.android.instantapps:instantapps:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
-    implementation group: 'com.android.volley', name: 'volley', version: '1.2.0'
-    implementation "com.google.android.material:material:1.4.0-beta01"
+    implementation group: 'com.android.volley', name: 'volley', version: '1.2.1'
+    implementation "com.google.android.material:material:1.4.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
 }
