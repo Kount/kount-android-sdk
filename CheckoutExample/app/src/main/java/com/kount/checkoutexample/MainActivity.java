@@ -1,6 +1,7 @@
 package com.kount.checkoutexample;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -17,21 +18,18 @@ import com.kount.api.analytics.AnalyticsCollector;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
     static final int MERCHANT_ID = 999999; // Insert your valid merchant ID
     static final int ENVIRONMENT = AnalyticsCollector.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
-
+    TextView location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("Sample");
-
-        // Check for location permissions so the Data Collector can gather the device location
-        requestLocationPermissions();
+        location = (TextView) findViewById(R.id.location);
 
         AnalyticsCollector.setMerchantId(MERCHANT_ID);
         // This turns the alpha collections on(true)/off(false). It defaults to true
@@ -61,38 +59,60 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Check for location permissions so the Data Collector can gather the device location
+            requestLocationPermission(this);
+        } else {
+            location.setText("Allowed");
+            //Calling this will start standard DeviceData Collection
+            AnalyticsCollector.collectDeviceDataForSession(this);
+        }
+        super.onCreate(savedInstanceState);
+
     }
 
-    void requestLocationPermissions() {
-        final TextView location = (TextView) findViewById(R.id.location);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
-                }
+    private void requestLocationPermission(Activity activity) {
+        if (ContextCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            ) {
+                ActivityCompat.requestPermissions(
+                        activity,
+                        new String[]{(Manifest.permission.ACCESS_FINE_LOCATION)},
+                        AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                );
             } else {
-                location.setText("Allowed");
+                ActivityCompat.requestPermissions(
+                        activity,
+                        new String[]{(Manifest.permission.ACCESS_FINE_LOCATION)},
+                        AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                );
             }
         } else {
-            // The permissions are allowed by default if installed on a device with a OS less than M
             location.setText("Allowed");
+            AnalyticsCollector.collectDeviceDataForSession(activity);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         final TextView location = (TextView) findViewById(R.id.location);
-        if (requestCode == PERMISSIONS_REQUEST_LOCATION) {
+        if (requestCode == AnalyticsCollector.REQUEST_PERMISSION_LOCATION) {
+            AnalyticsCollector.collectDeviceDataForSession(this);
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 location.setText("Allowed");
             } else {
                 location.setText("Denied");
             }
         }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
 }
