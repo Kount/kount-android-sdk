@@ -1,4 +1,8 @@
-apply plugin: 'com.android.application'
+//apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'maven-publish'
+}
 
 android {
     compileSdkVersion 30
