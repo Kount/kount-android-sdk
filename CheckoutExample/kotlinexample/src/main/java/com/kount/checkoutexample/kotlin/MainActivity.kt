@@ -9,7 +9,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.kount.api.DataCollector
 import com.kount.api.analytics.AnalyticsCollector
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,6 +31,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         //This turns the alpha collections on(true)/off(false). It defaults to true
         AnalyticsCollector.collectAnalytics(true)
         AnalyticsCollector.setEnvironment(ENVIRONMENT)
+
         merchant.text = "$MERCHANT_ID"
         when (ENVIRONMENT) {
             AnalyticsCollector.ENVIRONMENT_TEST -> environment.text = "Test"

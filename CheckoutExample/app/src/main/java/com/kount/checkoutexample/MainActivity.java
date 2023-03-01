@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.DatabaseUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.kount.api.DataCollector;
 import com.kount.api.analytics.AnalyticsCollector;
 
 import java.util.Locale;
@@ -37,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // This turns the alpha collections on(true)/off(false). It defaults to true
         AnalyticsCollector.collectAnalytics(true);
         AnalyticsCollector.setEnvironment(ENVIRONMENT);
+
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);
         final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
