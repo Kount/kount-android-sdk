@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         //This turns the alpha collections on(true)/off(false). It defaults to true
         AnalyticsCollector.collectAnalytics(true)
         AnalyticsCollector.setEnvironment(ENVIRONMENT)
-        DataCollector.getInstance().setDebug(true)
         merchant.text = "$MERCHANT_ID"
         when (ENVIRONMENT) {
             AnalyticsCollector.ENVIRONMENT_TEST -> environment.text = "Test"

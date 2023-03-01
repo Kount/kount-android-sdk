@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // This turns the alpha collections on(true)/off(false). It defaults to true
         AnalyticsCollector.collectAnalytics(true);
         AnalyticsCollector.setEnvironment(ENVIRONMENT);
-        DataCollector.getInstance().setDebug(true);
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);
         final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
