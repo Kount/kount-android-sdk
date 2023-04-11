@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -40,7 +44,7 @@ repositories {
     jcenter()
     maven { url "https://jitpack.io" }
 }
-String VERSION_NAME = "4.2.4"
+String VERSION_NAME = "4.3.0"
 String GROUP_ID = "com.kount"
 String ARTIFACT_ID = "datacollector"
 
@@ -52,7 +56,7 @@ afterEvaluate {
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
 
-                artifact('../../KountDataCollector/kount-data-collector-4.2.4.jar')
+                artifact('../../KountDataCollector/kount-data-collector-4.3.0.jar')
 
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')

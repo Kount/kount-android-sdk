@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -43,13 +46,21 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         checkoutButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, CollectionActivity::class.java))
         }
+        Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         // Check for location permissions so the Data Collector can gather the device location
             requestLocationPermission(this) else {
             location.text = "Allowed"
 
             //Calling this will start standard DeviceData Collection
-            AnalyticsCollector.collectDeviceDataForSession(this)
+            AnalyticsCollector.collectDeviceDataForSession(this,{sessionId ->
+                Log.d("TAG", "Client success completed with sessionId $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+
+            },{ sessionId, error ->
+                Log.d("TAG", "client failed with sessionId $error, $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+            })
         }
         super.onCreate(savedInstanceState)
 
@@ -80,7 +91,13 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
             }
         } else {
             location.text = "Allowed"
-            AnalyticsCollector.collectDeviceDataForSession(activity)
+            AnalyticsCollector.collectDeviceDataForSession(activity,{sessionId ->
+                Log.d("TAG", "utils success completed with sessionId $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+            },{ sessionId, error ->
+                Log.d("TAG", "utils failed with sessionId $error, $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+            })
         }
     }
 
@@ -90,7 +107,13 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         grantResults: IntArray
     ) {
         if (requestCode == AnalyticsCollector.REQUEST_PERMISSION_LOCATION) {
-            AnalyticsCollector.collectDeviceDataForSession(this)
+            AnalyticsCollector.collectDeviceDataForSession(this,{sessionId ->
+                Log.d("TAG", "onrequest success completed with sessionId $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+            },{ sessionId, error ->
+                Log.d("TAG", " onrequest failed with sessionId $error, $sessionId")
+                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+            })
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 location.text = "Allowed"
             } else {
