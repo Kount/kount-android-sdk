@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 34
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.kount.checkoutexample"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 26
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
@@ -44,7 +44,7 @@ repositories {
     jcenter()
     maven { url "https://jitpack.io" }
 }
-String VERSION_NAME = "4.3.0"
+String VERSION_NAME = "4.3.1"
 String GROUP_ID = "com.kount"
 String ARTIFACT_ID = "datacollector"
 
@@ -56,7 +56,7 @@ afterEvaluate {
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
 
-                artifact('../../KountDataCollector/kount-data-collector-4.3.0.jar')
+                artifact('../../KountDataCollector/kount-data-collector-4.3.1.jar')
 
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')

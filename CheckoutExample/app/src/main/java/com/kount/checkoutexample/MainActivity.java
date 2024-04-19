@@ -24,7 +24,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
-    static final int MERCHANT_ID = 999999; // Insert your valid merchant ID
+    static final String MERCHANT_ID = "999999"; // Insert your valid merchant ID
     static final int ENVIRONMENT = AnalyticsCollector.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
     TextView location;
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         final TextView environment = (TextView) findViewById(R.id.environment);
         final Button checkoutButton = (Button) findViewById(R.id.checkoutButton);
 
-        merchant.setText(String.format(Locale.US, "%d", MERCHANT_ID));
+        merchant.setText(MERCHANT_ID);
         switch (ENVIRONMENT) {
             case AnalyticsCollector.ENVIRONMENT_TEST:
                 environment.setText("Test");
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             });
         }
         super.onCreate(savedInstanceState);
-
     }
 
     private void requestLocationPermission(Activity activity) {
