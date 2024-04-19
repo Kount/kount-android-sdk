@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
 
     companion object Cons {
-        val MERCHANT_ID = 999999 // Insert your valid merchant ID
+        val MERCHANT_ID = "999999" // Insert your valid merchant ID
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         AnalyticsCollector.collectAnalytics(true)
         AnalyticsCollector.setEnvironment(ENVIRONMENT)
 
-        merchant.text = "$MERCHANT_ID"
+        merchant.text = MERCHANT_ID
         when (ENVIRONMENT) {
             AnalyticsCollector.ENVIRONMENT_TEST -> environment.text = "Test"
             AnalyticsCollector.ENVIRONMENT_PRODUCTION -> environment.text = "Production"
