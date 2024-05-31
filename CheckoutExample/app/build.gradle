@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'maven-publish'
 
+// Version name properties file reader
+def versionPropertiesFile = new File(rootProject.projectDir, "version.properties")
+def versionProperties = new Properties()
+versionPropertiesFile.withReader("UTF-8") { reader -> versionProperties.load(reader) }
+def version_name = versionProperties.getProperty("version.name")
+
+
+
 android {
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
@@ -44,7 +52,7 @@ repositories {
     jcenter()
     maven { url "https://jitpack.io" }
 }
-String VERSION_NAME = "4.3.1"
+String VERSION_NAME = version_name
 String GROUP_ID = "com.kount"
 String ARTIFACT_ID = "datacollector"
 
@@ -54,9 +62,9 @@ afterEvaluate {
             release(MavenPublication) {
                 groupId GROUP_ID
                 artifactId = ARTIFACT_ID
-                version = VERSION_NAME
+                version = VERSION_NAME.replace('v','')
 
-                artifact('../../KountDataCollector/kount-data-collector-4.3.1.jar')
+                artifact('../../KountDataCollector/kount-data-collector-' + VERSION_NAME.replace('v','') + '.jar')
 
                 pom.withXml {
                     def dependenciesNode = asNode().appendNode('dependencies')
@@ -65,7 +73,7 @@ afterEvaluate {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
                             dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
+                            dependencyNode.appendNode('version', VERSION_NAME == "" ? it.version : VERSION_NAME.replace('v',''))
                         }
                     }
                 }
@@ -74,4 +82,11 @@ afterEvaluate {
         }
     }
 
+}
+
+task getVersionNameTest(){
+   doFirst{
+       println "version_name: " + version_name
+       println "VERSION_NAME: " + VERSION_NAME
+   }
 }
