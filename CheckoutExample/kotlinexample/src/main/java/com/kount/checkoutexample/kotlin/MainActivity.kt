@@ -9,17 +9,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kount.api.analytics.AnalyticsCollector
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val PERMISSIONS_REQUEST_LOCATION = 0
     private val ENVIRONMENT: Int =
         AnalyticsCollector.ENVIRONMENT_TEST//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
 
+    private lateinit var  merchant: TextView
+    private lateinit var  environment: TextView
+    private lateinit var  checkoutButton: Button
+    private lateinit var  location: TextView
 
     companion object Cons {
         val MERCHANT_ID = "999999" // Insert your valid merchant ID
@@ -28,6 +33,11 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_main)
         title = "Sample"
+
+        merchant=findViewById(R.id.merchant)
+        environment=findViewById(R.id.environment)
+        checkoutButton=findViewById(R.id.checkoutButton)
+        location=findViewById(R.id.location)
 
 
         AnalyticsCollector.setMerchantId(MERCHANT_ID)
