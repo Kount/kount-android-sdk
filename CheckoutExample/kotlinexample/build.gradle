@@ -5,6 +5,10 @@ android {
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
 
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
     defaultConfig {
         applicationId "com.kount.checkoutexample.kotlin"
         minSdkVersion 26
