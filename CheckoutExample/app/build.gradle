@@ -7,8 +7,6 @@ def versionProperties = new Properties()
 versionPropertiesFile.withReader("UTF-8") { reader -> versionProperties.load(reader) }
 def version_name = versionProperties.getProperty("version.name")
 
-
-
 android {
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
@@ -38,20 +36,19 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.instantapps:instantapps:1.1.0'
-
-    implementation 'com.google.android.instantapps:instantapps:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation group: 'com.android.volley', name: 'volley', version: '1.2.1'
     implementation "com.google.android.material:material:1.4.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
 }
+
 repositories {
     mavenCentral()
     google()
     jcenter()
     maven { url "https://jitpack.io" }
 }
+
 String VERSION_NAME = version_name
 String GROUP_ID = "com.kount"
 String ARTIFACT_ID = "datacollector"
@@ -73,7 +70,7 @@ afterEvaluate {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', it.group)
                             dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', VERSION_NAME == "" ? it.version : VERSION_NAME.replace('v',''))
+                            dependencyNode.appendNode('version', it.version)
                         }
                     }
                 }
