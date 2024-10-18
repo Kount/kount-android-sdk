@@ -1,0 +1,108 @@
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"testRunner\" value=\"GRADLE\" />\n        <option name=\"distributionType\" value=\"LOCAL\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"gradleHome\" value=\"$APPLICATION_HOME_DIR$/gradle/gradle-2.14.1\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n            <option value=\"$PROJECT_DIR$/kotlinexample\" />\n          </set>\n        </option>\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	
++++ b/.idea/gradle.xml	
+@@ -4,10 +4,10 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="GRADLE" />
+         <option name="distributionType" value="LOCAL" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+-        <option name="gradleHome" value="$APPLICATION_HOME_DIR$/gradle/gradle-2.14.1" />
++        <option name="gradleHome" value="$USER_HOME$/gm/wrapper/dists/gradle-7.5-all" />
++        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+         <option name="modules">
+           <set>
+             <option value="$PROJECT_DIR$" />
+@@ -15,7 +15,7 @@
+             <option value="$PROJECT_DIR$/kotlinexample" />
+           </set>
+         </option>
+-        <option name="resolveModulePerSourceSet" value="false" />
++        <option name="resolveExternalAnnotations" value="false" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectModuleManager\">\n    <modules>\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/CheckoutExample.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/CheckoutExample.iml\" />\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml\" />\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml\" />\n    </modules>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	
++++ b/.idea/modules.xml	
+@@ -4,7 +4,13 @@
+     <modules>
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/CheckoutExample.iml" filepath="$PROJECT_DIR$/.idea/modules/CheckoutExample.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.androidTest.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.main.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/CheckoutExample.app.unitTest.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.androidTest.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.main.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinexample/CheckoutExample.kotlinexample.unitTest.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CompilerConfiguration\">\n    <bytecodeTargetLevel target=\"1.8\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	
++++ b/.idea/compiler.xml	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="1.8" />
++    <bytecodeTargetLevel target="11" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: jitpack.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/jitpack.yml b/jitpack.yml
+new file mode 100644
+--- /dev/null	
++++ b/jitpack.yml	
+@@ -0,0 +1,2 @@
++jdk:
++  - openjdk11
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"NullableNotNullManager\">\n    <option name=\"myDefaultNullable\" value=\"android.support.annotation.Nullable\" />\n    <option name=\"myDefaultNotNull\" value=\"android.support.annotation.NonNull\" />\n    <option name=\"myNullables\">\n      <value>\n        <list size=\"12\">\n          <item index=\"0\" class=\"java.lang.String\" itemvalue=\"org.jetbrains.annotations.Nullable\" />\n          <item index=\"1\" class=\"java.lang.String\" itemvalue=\"javax.annotation.Nullable\" />\n          <item index=\"2\" class=\"java.lang.String\" itemvalue=\"edu.umd.cs.findbugs.annotations.Nullable\" />\n          <item index=\"3\" class=\"java.lang.String\" itemvalue=\"android.support.annotation.Nullable\" />\n          <item index=\"4\" class=\"java.lang.String\" itemvalue=\"javax.annotation.CheckForNull\" />\n          <item index=\"5\" class=\"java.lang.String\" itemvalue=\"androidx.annotation.Nullable\" />\n          <item index=\"6\" class=\"java.lang.String\" itemvalue=\"android.annotation.Nullable\" />\n          <item index=\"7\" class=\"java.lang.String\" itemvalue=\"androidx.annotation.RecentlyNullable\" />\n          <item index=\"8\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.qual.Nullable\" />\n          <item index=\"9\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.compatqual.NullableDecl\" />\n          <item index=\"10\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.compatqual.NullableType\" />\n          <item index=\"11\" class=\"java.lang.String\" itemvalue=\"com.android.annotations.Nullable\" />\n        </list>\n      </value>\n    </option>\n    <option name=\"myNotNulls\">\n      <value>\n        <list size=\"11\">\n          <item index=\"0\" class=\"java.lang.String\" itemvalue=\"org.jetbrains.annotations.NotNull\" />\n          <item index=\"1\" class=\"java.lang.String\" itemvalue=\"javax.annotation.Nonnull\" />\n          <item index=\"2\" class=\"java.lang.String\" itemvalue=\"edu.umd.cs.findbugs.annotations.NonNull\" />\n          <item index=\"3\" class=\"java.lang.String\" itemvalue=\"android.support.annotation.NonNull\" />\n          <item index=\"4\" class=\"java.lang.String\" itemvalue=\"androidx.annotation.NonNull\" />\n          <item index=\"5\" class=\"java.lang.String\" itemvalue=\"android.annotation.NonNull\" />\n          <item index=\"6\" class=\"java.lang.String\" itemvalue=\"androidx.annotation.RecentlyNonNull\" />\n          <item index=\"7\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.qual.NonNull\" />\n          <item index=\"8\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.compatqual.NonNullDecl\" />\n          <item index=\"9\" class=\"java.lang.String\" itemvalue=\"org.checkerframework.checker.nullness.compatqual.NonNullType\" />\n          <item index=\"10\" class=\"java.lang.String\" itemvalue=\"com.android.annotations.NonNull\" />\n        </list>\n      </value>\n    </option>\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" default=\"true\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n  <component name=\"masterDetails\">\n    <states>\n      <state key=\"ProjectJDKs.UI\">\n        <settings>\n          <last-edited>1.8</last-edited>\n          <splitter-proportions>\n            <option name=\"proportions\">\n              <list>\n                <option value=\"0.2\" />\n              </list>\n            </option>\n          </splitter-proportions>\n        </settings>\n      </state>\n    </states>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	
++++ b/.idea/misc.xml	
+@@ -39,7 +39,7 @@
+       </value>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="temurin-11" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
