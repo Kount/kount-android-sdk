@@ -1,5 +1,9 @@
 # Android SDK Release Notes
 
+## 4.3.2
+* Patched vulnerability CWE-926
+* Minimum Version on Android API: 26 (Oreo)
+
 ## 4.3.1
 * QA Environment hidden
 * Updated QA environment URL
@@ -7,6 +11,9 @@
 * Added Changelog
 * Enhanced Unit Tests
 * Minimum Version on Android API: 21 (Lollipop)
+* Regex updated for client_id and session_id
+* Autogeneration of session_id when the field is null or empty
+
 
 ## 4.3.0
 * Added the new feature of Completion Handler. This feature can help you perform any action of your choice just after the DDC Data Collection completes. The needed actions can be performed in the completion block.
