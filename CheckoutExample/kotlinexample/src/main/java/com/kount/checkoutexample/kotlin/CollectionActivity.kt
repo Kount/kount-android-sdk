@@ -3,8 +3,8 @@ package com.kount.checkoutexample.kotlin
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.kount.api.analytics.AnalyticsCollector
-import com.kount.api.analytics.DeviceDataCollector
+import com.kount.api.KountSDK
+import com.kount.api.internal.analytics.entities.CollectionStatus
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -14,13 +14,13 @@ class CollectionActivity : AppCompatActivity() {
         title = "Checkout Page"
 
         val textArea = findViewById<TextView>(R.id.textarea)
-        val deviceSessionID = AnalyticsCollector.getSessionId()
+        val deviceSessionID = KountSDK.getSessionId()
         textArea.append("Session ID:\n$deviceSessionID\n\n")
 
-        val status = AnalyticsCollector.getCollectionStatus()
+        val status = KountSDK.getCollectionStatus()
         textArea.append("Collection Status: $status\n\n")
-        if (status == DeviceDataCollector.CollectionStatus.FAILED) {
-            textArea.append("Error: " + status.getError()?.description)
+        if (status == CollectionStatus.FAILED.toString()) {
+            textArea.append("Error: " + status.toString())
         }
     }
 }
