@@ -17,7 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.kount.api.analytics.AnalyticsCollector;
+
+import com.kount.api.KountSDK;
 
 import java.util.Locale;
 
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
     final int PERMISSIONS_REQUEST_LOCATION = 0;
     static final String MERCHANT_ID = "999999"; // Insert your valid merchant ID
-    static final int ENVIRONMENT = AnalyticsCollector.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
+    static final int ENVIRONMENT = KountSDK.ENVIRONMENT_TEST;//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
     TextView location;
 
     @Override
@@ -34,10 +35,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         setTitle("Sample");
         location = (TextView) findViewById(R.id.location);
 
-        AnalyticsCollector.setMerchantId(MERCHANT_ID);
+        KountSDK.INSTANCE.setMerchantId(MERCHANT_ID);
         // This turns the alpha collections on(true)/off(false). It defaults to true
-        AnalyticsCollector.collectAnalytics(true);
-        AnalyticsCollector.setEnvironment(ENVIRONMENT);
+        KountSDK.INSTANCE.setCollectAnalytics(true);
+        KountSDK.INSTANCE.setEnvironment(ENVIRONMENT);
 
         final TextView merchant = (TextView) findViewById(R.id.merchant);
         final TextView environment = (TextView) findViewById(R.id.environment);
@@ -45,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
         merchant.setText(MERCHANT_ID);
         switch (ENVIRONMENT) {
-            case AnalyticsCollector.ENVIRONMENT_TEST:
+            case KountSDK.ENVIRONMENT_TEST:
                 environment.setText("Test");
                 break;
-            case AnalyticsCollector.ENVIRONMENT_PRODUCTION:
+            case KountSDK.ENVIRONMENT_PRODUCTION:
                 environment.setText("Production");
                 break;
             default:
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 startActivity(intent);
             }
         });
-        Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+        Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Check for location permissions so the Data Collector can gather the device location
             requestLocationPermission(this);
@@ -70,15 +71,15 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             location.setText("Allowed");
 
             //Calling this will start standard DeviceData Collection
-            AnalyticsCollector.collectDeviceDataForSession(this,(sessionId)->
+            KountSDK.INSTANCE.collectForSession(this,(sessionId)->
             {
                 Log.d("TAG", "Client success completed with sessionId "+sessionId);
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             },(sessionId, error)->
             {
                 Log.d("TAG", "client failed with sessionId $error, $sessionId");
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             });
         }
@@ -99,26 +100,26 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 ActivityCompat.requestPermissions(
                         activity,
                         new String[]{(Manifest.permission.ACCESS_FINE_LOCATION)},
-                        AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                        KountSDK.REQUEST_PERMISSION_LOCATION
                 );
             } else {
                 ActivityCompat.requestPermissions(
                         activity,
                         new String[]{(Manifest.permission.ACCESS_FINE_LOCATION)},
-                        AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                        KountSDK.REQUEST_PERMISSION_LOCATION
                 );
             }
         } else {
             location.setText("Allowed");
-            AnalyticsCollector.collectDeviceDataForSession(activity,(sessionId)->
+            KountSDK.INSTANCE.collectForSession(activity,(sessionId)->
             {
                 Log.d("TAG", "Util success completed with sessionId "+sessionId);
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             },(sessionId, error)->
             {
                 Log.d("TAG", "Util failed with sessionId $error, $sessionId");
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             });
         }
@@ -127,16 +128,16 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         final TextView location = (TextView) findViewById(R.id.location);
-        if (requestCode == AnalyticsCollector.REQUEST_PERMISSION_LOCATION) {
-            AnalyticsCollector.collectDeviceDataForSession(this,(sessionId)->
+        if (requestCode == KountSDK.REQUEST_PERMISSION_LOCATION) {
+            KountSDK.INSTANCE.collectForSession(this,(sessionId)->
             {
                 Log.d("TAG", "onrequest success completed with sessionId "+sessionId);
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             },(sessionId, error)->
             {
                 Log.d("TAG", "onrequest failed with sessionId $error, $sessionId");
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus());
+                Log.d("TAG", "DDC status is " +KountSDK.INSTANCE.getCollectionStatus());
                 return null;
             });
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

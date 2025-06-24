@@ -14,12 +14,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.kount.api.analytics.AnalyticsCollector
+import com.kount.api.KountSDK
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val PERMISSIONS_REQUEST_LOCATION = 0
     private val ENVIRONMENT: Int =
-        AnalyticsCollector.ENVIRONMENT_TEST//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
+        KountSDK.ENVIRONMENT_TEST//For production need to add AnalyticsCollector.ENVIRONMENT_PRODUCTION
 
     private lateinit var  merchant: TextView
     private lateinit var  environment: TextView
@@ -40,15 +40,15 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         location=findViewById(R.id.location)
 
 
-        AnalyticsCollector.setMerchantId(MERCHANT_ID)
+        KountSDK.setMerchantId(MERCHANT_ID)
         //This turns the alpha collections on(true)/off(false). It defaults to true
-        AnalyticsCollector.collectAnalytics(true)
-        AnalyticsCollector.setEnvironment(ENVIRONMENT)
+        KountSDK.setCollectAnalytics(true)
+        KountSDK.setEnvironment(ENVIRONMENT)
 
         merchant.text = MERCHANT_ID
         when (ENVIRONMENT) {
-            AnalyticsCollector.ENVIRONMENT_TEST -> environment.text = "Test"
-            AnalyticsCollector.ENVIRONMENT_PRODUCTION -> environment.text = "Production"
+            KountSDK.ENVIRONMENT_TEST -> environment.text = "Test"
+            KountSDK.ENVIRONMENT_PRODUCTION -> environment.text = "Production"
 
             else -> environment.text = "Unknown"
         }
@@ -56,20 +56,20 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         checkoutButton.setOnClickListener {
             startActivity(Intent(this@MainActivity, CollectionActivity::class.java))
         }
-        Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+        Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         // Check for location permissions so the Data Collector can gather the device location
             requestLocationPermission(this) else {
             location.text = "Allowed"
 
             //Calling this will start standard DeviceData Collection
-            AnalyticsCollector.collectDeviceDataForSession(this,{sessionId ->
+            KountSDK.collectForSession(this,{sessionId ->
                 Log.d("TAG", "Client success completed with sessionId $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
 
             },{ sessionId, error ->
                 Log.d("TAG", "client failed with sessionId $error, $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
             })
         }
         super.onCreate(savedInstanceState)
@@ -90,23 +90,23 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
                 ActivityCompat.requestPermissions(
                     activity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                    KountSDK.REQUEST_PERMISSION_LOCATION
                 )
             } else {
                 ActivityCompat.requestPermissions(
                     activity,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    AnalyticsCollector.REQUEST_PERMISSION_LOCATION
+                    KountSDK.REQUEST_PERMISSION_LOCATION
                 )
             }
         } else {
             location.text = "Allowed"
-            AnalyticsCollector.collectDeviceDataForSession(activity,{sessionId ->
+            KountSDK.collectForSession(activity,{sessionId ->
                 Log.d("TAG", "utils success completed with sessionId $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
             },{ sessionId, error ->
                 Log.d("TAG", "utils failed with sessionId $error, $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
             })
         }
     }
@@ -116,13 +116,13 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode == AnalyticsCollector.REQUEST_PERMISSION_LOCATION) {
-            AnalyticsCollector.collectDeviceDataForSession(this,{sessionId ->
+        if (requestCode == KountSDK.REQUEST_PERMISSION_LOCATION) {
+            KountSDK.collectForSession(this,{sessionId ->
                 Log.d("TAG", "onrequest success completed with sessionId $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
             },{ sessionId, error ->
                 Log.d("TAG", " onrequest failed with sessionId $error, $sessionId")
-                Log.d("TAG", "DDC status is " +AnalyticsCollector.getCollectionStatus())
+                Log.d("TAG", "DDC status is " +KountSDK.getCollectionStatus())
             })
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 location.text = "Allowed"

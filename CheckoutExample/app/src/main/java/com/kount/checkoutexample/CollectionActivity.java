@@ -5,8 +5,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.kount.api.analytics.AnalyticsCollector;
-import com.kount.api.analytics.DeviceDataCollector;
+import com.kount.api.KountSDK;
+import com.kount.api.internal.analytics.entities.CollectionStatus;
 
 public class CollectionActivity extends AppCompatActivity {
 
@@ -17,13 +17,13 @@ public class CollectionActivity extends AppCompatActivity {
         setTitle("Checkout Page");
 
         final TextView textArea = findViewById(R.id.textarea);
-        final String deviceSessionID = AnalyticsCollector.getSessionId();
+        final String deviceSessionID = KountSDK.INSTANCE.getSessionId();
         textArea.append("Session ID:\n" + deviceSessionID + "\n\n");
 
-        DeviceDataCollector.CollectionStatus status = AnalyticsCollector.getCollectionStatus();
+        String status = KountSDK.INSTANCE.getCollectionStatus();
         textArea.append("Collection Status: " + status + "\n");
-        if (status == DeviceDataCollector.CollectionStatus.FAILED) {
-            textArea.append("Error: " + status.getError());
+        if (status.equals(CollectionStatus.FAILED.toString())) {
+            textArea.append("Error: " + status);
         }
     }
 }
