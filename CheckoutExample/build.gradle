@@ -32,19 +32,22 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task checkRepoName {
+tasks.register('verifyJitpackBuild') {
     doFirst {
         def repo = System.getenv('JITPACK_REPO') ?: System.getenv('REPOSITORY')
         def branch = System.getenv('JITPACK_BRANCH') ?: System.getenv('BRANCH')
 
         if (repo != null && repo != 'Kount/kount-android-sdk') {
-            throw new GradleException("Este proyecto solo puede ser compilado desde el repositorio 'Kount/kount-android-sdk'. Repositorio detectado: " + repo)
+            throw new GradleException("Compilación no permitida desde repositorio: $repo")
         }
-        else if (branch != null && branch != 'master') {
-            throw new GradleException("Este proyecto solo puede ser compilado desde la rama 'master'. Rama detectada: " + branch)
+        if (branch != null && branch != 'master') {
+            throw new GradleException("Compilación no permitida desde rama: $branch")
         }
-        else {
-            println "Building from the correct repository: " + (repo ?: "local build") + " and branch: " + (branch ?: "local branch")
-        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'compileJava' || task.name == 'compileKotlin') {
+        task.dependsOn 'verifyJitpackBuild'
     }
 }

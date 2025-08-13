@@ -1,4 +1,9 @@
 jdk:
   - openjdk17
-skip:
-  - "!($REPOSITORY == 'Kount/kount-android-sdk' && $BRANCH == 'master')"
+before_install:
+  - echo "Verifing repo: $REPOSITORY and branch: $BRANCH"
+  - |
+    if [ "$REPOSITORY" != "Kount/kount-android-sdk" ] || [ "$BRANCH" != "master" ]; then
+      echo "Error: Only can be build in Kount/kount-android-sdk and master branch"
+      exit 1
+    fi
