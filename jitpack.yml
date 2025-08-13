@@ -1,4 +1,4 @@
 jdk:
   - openjdk17
 skip:
-  - "!($REPOSITORY == 'Kount/kount-android-sdk')"
+  - "!($REPOSITORY == 'Kount/kount-android-sdk' && $BRANCH == 'master')"
