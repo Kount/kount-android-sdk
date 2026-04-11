@@ -43,6 +43,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.instantapps:instantapps:1.1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.android.gms:play-services-base:18.0.1'
     implementation group: 'com.android.volley', name: 'volley', version: '1.2.1'
     implementation "com.google.android.material:material:1.4.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
