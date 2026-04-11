@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kount.api.KountSDK;
-import com.kount.api.internal.analytics.entities.CollectionStatus;
+import com.kount.api.internal.analytics.common.CollectionStatus;
 
 public class CollectionActivity extends AppCompatActivity {
 
