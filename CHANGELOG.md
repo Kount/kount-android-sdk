@@ -1,5 +1,20 @@
 # Android SDK Release Notes
 
+## 5.0.2
+* Fixed `IllegalStateException: Must be called on the UI thread` crash introduced in 5.0.1.
+* Removed the `com.google.android.gms:play-services-base` dependency.
+* Fixed a conflict between the host app's `OnTouchListener`/`OnClickListener`/`OnFocusChangeListener` implementations and the SDK's internal analytics listeners, where attaching one would silently override the other. The SDK now wraps the existing listener so both the app's and the SDK's logic run correctly.
+
+## 5.0.1
+* Internal restructuring of error handling and enum classes; no public API changes.
+  * Known issue: could throw `IllegalStateException: Must be called on the UI thread` when `collectForSession()` was invoked from a background thread/dispatcher. Fixed in 5.0.2 (see above).
+
+## 5.0.0
+* Renamed `KountSdk` to `KountSDK`.
+* Renamed package from `com.kount.api.kotlin` to `com.kount.api` — **breaking change** for existing integrations; update your imports accordingly.
+* Renamed Gradle module from `DataCollectorKotlin` to `KountSDK`.
+* Updated internal configuration variables and setters.
+
 ## 4.3.2
 * Patched vulnerability CWE-926
 * Minimum Version on Android API: 26 (Oreo)
