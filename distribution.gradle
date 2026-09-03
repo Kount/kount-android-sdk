@@ -1,0 +1,58 @@
+/**
+ * Distribution Source Configuration
+ * This script manages the distribution source identification for the Kount Data Collector jar.
+ * Supports identification of jar source: jitpack or github
+ */
+
+// Define distribution sources
+ext.DISTRIBUTION_SOURCES = [
+    JITPACK: 'jitpack',
+    GITHUB: 'github'
+]
+
+// Default source (can be overridden by build variants or command line)
+ext.distributionSource = project.hasProperty('distributionSource') ? 
+    project.properties['distributionSource'] : 'github'
+
+// Create distribution metadata
+ext.createDistributionMetadata = { source ->
+    def metadata = [
+        'distribution.source': source,
+        'build.timestamp': System.currentTimeMillis(),
+        'build.gradle.version': gradle.gradleVersion
+    ]
+    return metadata
+}
+
+// Generate distribution properties file
+ext.generateDistributionProperties = { source, outputDir ->
+    def metadata = createDistributionMetadata(source)
+    def propsFile = new File(outputDir, 'distribution.properties')
+    
+    propsFile.getParentFile().mkdirs()
+    propsFile.text = """# Kount Data Collector - Distribution Metadata
+# This file identifies the source distribution of this jar
+
+# Distribution source: jitpack or github
+distribution.source=${source}
+
+# Build metadata
+build.timestamp=${metadata['build.timestamp']}
+build.gradle.version=${metadata['build.gradle.version']}
+
+# Version information
+# This is populated from version.properties during build
+"""
+    return propsFile
+}
+
+// Function to determine distribution source from jar filename
+ext.detectDistributionSourceFromJar = { jarName ->
+    if (jarName.contains('-jitpack')) {
+        return 'jitpack'
+    } else if (jarName.contains('-github')) {
+        return 'github'
+    }
+    // Default to github if no specific marker
+    return 'github'
+}

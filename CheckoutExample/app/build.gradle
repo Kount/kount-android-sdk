@@ -7,6 +7,18 @@ def versionProperties = new Properties()
 versionPropertiesFile.withReader("UTF-8") { reader -> versionProperties.load(reader) }
 def version_name = versionProperties.getProperty("version.name")
 
+// Detect distribution source (jitpack or github)
+def detectDistributionSource = {
+    // Check if building on JitPack (JitPack sets specific environment variables)
+    def isJitPack = System.getenv('JITPACK') == 'true' || 
+                    project.hasProperty('jitpack') ||
+                    System.getenv('BUILD_NUMBER') != null // Common CI/CD indicator
+    
+    return isJitPack ? 'jitpack' : 'github'
+}
+
+def distributionSource = detectDistributionSource()
+
 android {
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
@@ -17,6 +29,9 @@ android {
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
+        
+        // Add distribution source as buildConfigField - automatically passed to SDK
+        buildConfigField "String", "DISTRIBUTION_SOURCE", "\"${distributionSource}\""
     }
     buildTypes {
         release {
@@ -28,6 +43,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    
+    // Resource filtering to inject distribution source into properties file
+    sourceSets {
+        main {
+            resources {
+                srcDir 'src/main/res/raw'
+            }
+        }
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
@@ -35,6 +59,28 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         jvmTarget = "17"
     }
 }
+
+// Task to process distribution configuration file before build
+task processDistributionConfig {
+    doFirst {
+        def configFile = file('src/main/res/raw/distribution_config.properties')
+        if (configFile.exists()) {
+            def content = configFile.text
+            def timestamp = System.currentTimeMillis()
+            
+            // Replace template variables
+            content = content.replace('${DISTRIBUTION_SOURCE}', distributionSource)
+            content = content.replace('${BUILD_TIMESTAMP}', timestamp.toString())
+            
+            configFile.text = content
+            println "Distribution Source Identifier: ${distributionSource}"
+            println "Build Timestamp: ${timestamp}"
+        }
+    }
+}
+
+// Hook the task to run before preBuild
+preBuild.dependsOn processDistributionConfig
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
