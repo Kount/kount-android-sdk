@@ -19,7 +19,16 @@ def detectDistributionSource = {
 
 def distributionSource = detectDistributionSource()
 
-android {
+// Log distribution source detection
+println "\n🎯 DETECTED BUILD ENVIRONMENT: ${distributionSource.toUpperCase()}"
+if (System.getenv('JITPACK') == 'true') {
+    println "   (JitPack build detected: JITPACK=true)"
+} else if (System.getenv('BUILD_NUMBER') != null) {
+    println "   (CI/CD environment detected: BUILD_NUMBER set)"
+} else {
+    println "   (Local/GitHub build)"
+}
+println ""
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
 
@@ -67,9 +76,13 @@ task injectDistributionMetadata {
         def jarFile = fileTree(dir: jarDir, include: '*.jar').singleFile
         
         if (!jarFile.exists()) {
-            println "Warning: SDK jar not found at ${jarFile}"
+            println "⚠️  WARNING: SDK jar not found at ${jarFile}"
             return
         }
+        
+        println "\n" + "="*80
+        println "🔧 KOUNT SDK - DISTRIBUTION SOURCE IDENTIFICATION"
+        println "="*80
         
         def timestamp = System.currentTimeMillis()
         def buildDir = file('build/tmp/distribution-injection')
@@ -82,11 +95,16 @@ task injectDistributionMetadata {
         extractDir.mkdirs()
         metaInfDir.mkdirs()
         
+        println "📦 JAR Location: ${jarFile.absolutePath}"
+        println "📍 Processing: ${jarFile.name}"
+        
         // Extract jar
         copy {
             from zipTree(jarFile)
             into extractDir
         }
+        
+        println "✓ Extracted JAR successfully"
         
         // Create distribution properties file
         def distributionProps = new File(metaInfDir, 'distribution.properties')
@@ -100,19 +118,29 @@ build.gradle.version=${gradle.gradleVersion}
 build.os=${System.getProperty('os.name')}
 """
         
+        println "📝 Created distribution.properties:"
+        println "   distribution.source = ${distributionSource}"
+        println "   distribution.version = ${version_name}"
+        println "   build.timestamp = ${timestamp}"
+        println "   build.gradle.version = ${gradle.gradleVersion}"
+        println "   build.os = ${System.getProperty('os.name')}"
+        
         // Backup original jar
         def backupJar = new File(jarDir, jarFile.name.replace('.jar', '-original.jar'))
         if (!backupJar.exists()) {
+            println "💾 Creating backup: ${backupJar.name}"
             jarFile.renameTo(backupJar)
         }
         
         // Recreate jar with distribution metadata
+        println "📦 Repackaging JAR with distribution metadata..."
         ant.jar(destfile: jarFile.absolutePath, basedir: extractDir.absolutePath)
         
-        println "✓ Distribution metadata injected into SDK"
-        println "  Source: ${distributionSource}"
-        println "  Version: ${version_name}"
-        println "  Timestamp: ${timestamp}"
+        println "✅ SUCCESS: Distribution metadata injected into SDK"
+        println "   Source Type: ${distributionSource.toUpperCase()}"
+        println "   SDK Version: ${version_name}"
+        println "   Jar File: ${jarFile.name}"
+        println "="*80 + "\n"
         
         // Clean temp directory
         buildDir.deleteDir()
@@ -132,7 +160,10 @@ task processDistributionConfig {
             content = content.replace('${BUILD_TIMESTAMP}', timestamp.toString())
             
             configFile.text = content
-            println "Distribution Config: ${distributionSource}"
+            println "\n📋 Distribution Config File Updated:"
+            println "   File: distribution_config.properties"
+            println "   Source: ${distributionSource}"
+            println "   Timestamp: ${timestamp}\n"
         }
     }
 }
