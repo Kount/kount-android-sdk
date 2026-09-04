@@ -29,6 +29,8 @@ if (System.getenv('JITPACK') == 'true') {
     println "   (Local/GitHub build)"
 }
 println ""
+
+android {
     compileSdkVersion 34
     buildToolsVersion "29.0.3"
 
