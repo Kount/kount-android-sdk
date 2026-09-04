@@ -127,25 +127,32 @@ build.os=${System.getProperty('os.name')}
         println "   build.gradle.version = ${gradle.gradleVersion}"
         println "   build.os = ${System.getProperty('os.name')}"
         
-        // Backup original jar
-        def backupJar = new File(jarDir, jarFile.name.replace('.jar', '-original.jar'))
-        if (!backupJar.exists()) {
-            println "💾 Creating backup: ${backupJar.name}"
-            jarFile.renameTo(backupJar)
-        }
-        
         // Recreate jar with distribution metadata
         println "📦 Repackaging JAR with distribution metadata..."
-        ant.jar(destfile: jarFile.absolutePath, basedir: extractDir.absolutePath)
         
-        println "✅ SUCCESS: Distribution metadata injected into SDK"
-        println "   Source Type: ${distributionSource.toUpperCase()}"
-        println "   SDK Version: ${version_name}"
-        println "   Jar File: ${jarFile.name}"
-        println "="*80 + "\n"
+        // Create temporary backup for safety during repackaging
+        def tempBackupDir = new File(buildDir, 'original-backup')
+        tempBackupDir.mkdirs()
+        def tempBackup = new File(tempBackupDir, jarFile.name)
+        jarFile.renameTo(tempBackup)
         
-        // Clean temp directory
-        buildDir.deleteDir()
+        try {
+            // Recreate jar with distribution metadata
+            ant.jar(destfile: jarFile.absolutePath, basedir: extractDir.absolutePath)
+            
+            println "✅ SUCCESS: Distribution metadata injected into SDK"
+            println "   Source Type: ${distributionSource.toUpperCase()}"
+            println "   SDK Version: ${version_name}"
+            println "   Jar File: ${jarFile.name}"
+            println "="*80 + "\n"
+        } catch (Exception e) {
+            // If something fails, restore from backup
+            if (tempBackup.exists()) {
+                tempBackup.renameTo(jarFile)
+                println "⚠️  ERROR: Failed to repackage. Restored from backup."
+            }
+            throw e
+        }
     }
 }
 
