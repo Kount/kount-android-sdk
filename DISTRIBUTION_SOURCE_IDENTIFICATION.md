@@ -12,6 +12,14 @@ The Distribution Source Identification feature allows the Kount Data Collector t
 
 ## ✅ Cómo funciona automáticamente
 
+### 0. **JAR Base (en el Repositorio)**
+
+El JAR incluido en el repositorio (`KountDataCollector/kount-data-collector-5.0.3.jar`) YA tiene:
+```
+META-INF/distribution.properties:
+  distribution.source=github    # ← Default para GitHub
+```
+
 ### 1. **Detección de Fuente (Gradle)**
 
 En `CheckoutExample/app/build.gradle`:
@@ -53,58 +61,67 @@ task injectDistributionMetadata {
 
 ### 3. **Flujo de Uso del Cliente**
 
-#### **Escenario A: Cliente descarga SDK desde JitPack**
+#### **Escenario A: Cliente usa GitHub (Default)**
 
 ```
-Cliente ejecuta:
-  gradle build -Pjitpack
+Cliente obtiene JAR del repositorio
+  ├─ kount-data-collector-5.0.3.jar
+  └─ YA INCLUYE: META-INF/distribution.properties
+     distribution.source=github
 
   ↓
+
+Cliente ejecuta: gradle build (en su máquina local)
   
-Gradle detecta JITPACK=true
   ↓
   
-injectDistributionMetadata crea:
-  META-INF/distribution.properties:
-    distribution.source=jitpack
-    
+Gradle detecta: JITPACK ≠ true → 'github'
+  
   ↓
   
-JAR ahora contiene metadatos de jitpack
-  ↓
+injectDistributionMetadata:
+  ├─ Extrae JAR (que ya tiene 'github')
+  ├─ Actualiza: distribution.source=github
+  └─ Reempaqueta con metadata actualizada
   
-SDK Lee propiedades al inicializar
   ↓
-  
-SDK envía en cada request:
-  Header: X-Distribution-Source: jitpack
+
+App Cliente con SDK
+  └─ Envía: X-Distribution-Source: github
 ```
 
-#### **Escenario B: Cliente descarga SDK desde GitHub (default)**
+#### **Escenario B: JitPack Build**
 
 ```
-Cliente ejecuta:
-  gradle build
+JitPack clona el repositorio
+  ├─ Obtiene: kount-data-collector-5.0.3.jar
+  └─ YA INCLUYE: META-INF/distribution.properties
+     distribution.source=github
 
   ↓
+
+JitPack ejecuta: gradle build (con JITPACK=true)
   
-Gradle NO detecta JITPACK → default = github
   ↓
   
-injectDistributionMetadata crea:
-  META-INF/distribution.properties:
-    distribution.source=github
-    
+Gradle detecta: JITPACK=true → 'jitpack'
+  
   ↓
   
-JAR ahora contiene metadatos de github
-  ↓
+injectDistributionMetadata:
+  ├─ Extrae JAR (que tiene 'github')
+  ├─ SOBRESCRIBE: distribution.source=jitpack  ← ¡Aquí está la magia!
+  └─ Reempaqueta con metadata jitpack
   
-SDK Lee propiedades al inicializar
   ↓
-  
-SDK envía en cada request:
-  Header: X-Distribution-Source: github
+
+JitPack compila AAR/APK
+  └─ Incluye SDK con: X-Distribution-Source: jitpack
+
+  ↓
+
+Cliente descarga desde JitPack
+  └─ Recibe AAR ya compilado con metadata jitpack
 ```
 
 ---
@@ -155,14 +172,46 @@ build.os=Mac OS X
 
 **"¿Si un cliente descarga el SDK desde jitpack entonces el SDK enviará el valor 'jitpack' en el 'distribution'?"**
 
-✅ **SÍ**, automáticamente:
+✅ **SÍ, automáticamente:**
 
-- **Cuando JitPack compila**: Automáticamente inyectamos `distribution.source=jitpack` en el JAR
-- **El cliente descarga el AAR/JAR compilado**: Ya tiene el metadato dentro
-- **El SDK lee al inicializar**: Lee `META-INF/distribution.properties`
-- **En requests HTTP**: El SDK envía `X-Distribution-Source: jitpack`
+El flujo es:
+1. **JAR Base (en repo)**: Incluye `distribution.source=github` por defecto
+2. **Cliente descarga JAR**: Ya tiene metadata github
+3. **Si JitPack compila**: 
+   - Detecta `JITPACK=true`
+   - Extrae el JAR (que tiene 'github')
+   - **SOBRESCRIBE** con `distribution.source=jitpack`
+   - Reempaqueta y distribuye AAR con jitpack
+4. **Si es GitHub release**: 
+   - Mantiene `distribution.source=github`
+   - Distribuye JAR/AAR con github
 
 **Sin que el cliente haga nada adicional** ✨
+
+---
+
+**Analogía visual:**
+```
+┌─────────────────────────┐
+│ JAR base en repositorio │
+│ distribution.source=    │
+│      github ← DEFAULT   │
+└────────────┬────────────┘
+             │
+    ┌────────┴────────┐
+    │                 │
+    ▼                 ▼
+  GitHub           JitPack
+  ┌──────┐         ┌──────┐
+  │github│         │github│ (primero)
+  └──────┘         └───┬──┘
+                       │
+                 Sobrescribe
+                       │
+                   ┌───▼──┐
+                   │jitpack│ (final)
+                   └───────┘
+```
 
 ---
 
