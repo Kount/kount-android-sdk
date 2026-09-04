@@ -10,93 +10,171 @@ The Distribution Source Identification feature allows the Kount Data Collector t
 - **Feature Branch**: `feature/distribution-source-identification`
 - **Created**: 2026-09-03
 
-## Architecture
+## ✅ Cómo funciona automáticamente
 
-### Components
+### 1. **Detección de Fuente (Gradle)**
 
-1. **distribution.gradle** - Gradle configuration for managing distribution metadata
-2. **distribution-github.properties** - Metadata for GitHub distribution
-3. **distribution-jitpack.properties** - Metadata for JitPack distribution
-4. **DistributionSourceIdentifier.java** - Java utility class for Android apps
-5. **DistributionSourceIdentifier.kt** - Kotlin version of the utility class
-6. **build-distribution.sh** - Shell script to create distribution-specific jars
+En `CheckoutExample/app/build.gradle`:
 
-### How It Works
-
-#### Jar Naming Convention
-
-The feature supports three jar naming patterns:
-
-```
-kount-data-collector-5.0.3.jar              # Default (generic)
-kount-data-collector-5.0.3-github.jar       # GitHub distribution
-kount-data-collector-5.0.3-jitpack.jar      # JitPack distribution
+```gradle
+def detectDistributionSource = {
+    def isJitPack = System.getenv('JITPACK') == 'true' || 
+                    project.hasProperty('jitpack') ||
+                    System.getenv('BUILD_NUMBER') != null
+    return isJitPack ? 'jitpack' : 'github'
+}
 ```
 
-#### Metadata Structure
+**Cuándo se ejecuta:**
+- ✅ Si `JITPACK=true` → `distributionSource = 'jitpack'`
+- ✅ Si no → `distributionSource = 'github'` (default)
 
-Each distribution jar contains a `distribution.properties` file at the root that includes:
+---
 
-```properties
-distribution.source=github|jitpack
-version.name=5.0.3
-distribution.repository=<url>
-distribution.release.type=<type>
-build.timestamp=<timestamp>
-build.gradle.version=<gradle-version>
+### 2. **Inyección en el JAR (Tarea Gradle)**
+
+Antes de cada build, la tarea `injectDistributionMetadata`:
+
+```gradle
+task injectDistributionMetadata {
+    1. Extrae el JAR completo
+    2. Crea META-INF/distribution.properties con:
+       - distribution.source=jitpack|github
+       - distribution.version=5.0.3
+       - build.timestamp=<timestamp>
+    3. Reempaqueta el JAR
+    4. Crea backup (original.jar)
+}
 ```
 
-## Usage
+**Se ejecuta automáticamente:** `preBuild.dependsOn injectDistributionMetadata`
 
-### For App Developers
+---
 
-#### Java Example
+### 3. **Flujo de Uso del Cliente**
 
-```java
-import com.kount.checkoutexample.utils.DistributionSourceIdentifier;
+#### **Escenario A: Cliente descarga SDK desde JitPack**
 
-// Identify the distribution source
-DistributionSourceIdentifier.DistributionSource source = 
-    DistributionSourceIdentifier.identifySource();
+```
+Cliente ejecuta:
+  gradle build -Pjitpack
 
-// Get human-readable description
-String description = DistributionSourceIdentifier.getSourceDescription(source);
-
-// Log distribution info
-Log.d("Kount", "Using " + description + " distribution");
-
-// Get full metadata
-String metadata = DistributionSourceIdentifier.getDistributionMetadata();
+  ↓
+  
+Gradle detecta JITPACK=true
+  ↓
+  
+injectDistributionMetadata crea:
+  META-INF/distribution.properties:
+    distribution.source=jitpack
+    
+  ↓
+  
+JAR ahora contiene metadatos de jitpack
+  ↓
+  
+SDK Lee propiedades al inicializar
+  ↓
+  
+SDK envía en cada request:
+  Header: X-Distribution-Source: jitpack
 ```
 
-#### Kotlin Example
+#### **Escenario B: Cliente descarga SDK desde GitHub (default)**
 
-```kotlin
-import com.kount.checkoutexample.kotlin.utils.DistributionSourceIdentifier
+```
+Cliente ejecuta:
+  gradle build
 
-// Identify the distribution source
-val source = DistributionSourceIdentifier.identifySource()
-
-// Get human-readable description
-val description = DistributionSourceIdentifier.getSourceDescription(source)
-
-// Log distribution info
-Log.d("Kount", "Using $description distribution")
-
-// Get full metadata
-val metadata = DistributionSourceIdentifier.getDistributionMetadata()
+  ↓
+  
+Gradle NO detecta JITPACK → default = github
+  ↓
+  
+injectDistributionMetadata crea:
+  META-INF/distribution.properties:
+    distribution.source=github
+    
+  ↓
+  
+JAR ahora contiene metadatos de github
+  ↓
+  
+SDK Lee propiedades al inicializar
+  ↓
+  
+SDK envía en cada request:
+  Header: X-Distribution-Source: github
 ```
 
-#### Identify from Filename
+---
 
-```java
-// If you have the jar filename
-String jarName = "kount-data-collector-5.0.3-jitpack.jar";
-DistributionSourceIdentifier.DistributionSource source = 
-    DistributionSourceIdentifier.identifySourceFromFilename(jarName);
+## 🔍 Verificación
+
+Usa el script para inspeccionar el JAR después del build:
+
+```bash
+./CheckoutExample/verify-distribution-metadata.sh
 ```
 
-### Creating Distribution-Specific Jars
+**Output esperado cuando se ejecute después de un build:**
+
+```
+📦 Inspecting SDK JAR for distribution metadata...
+
+✓ Found: META-INF/distribution.properties
+
+Content:
+# Kount Data Collector - Distribution Source Identification
+# Auto-generated during build
+
+distribution.source=jitpack
+distribution.version=5.0.3
+build.timestamp=1725376234567
+build.gradle.version=7.4.2
+build.os=Mac OS X
+```
+
+---
+
+## 🚀 Pasos para Verificar en JitPack
+
+1. **Push a GitHub** (rama `feature/distribution-source-identification`)
+2. **En JitPack**, dispara un build manual
+3. **Descarga el AAR/JAR** resultante
+4. **Extrae y verifica:**
+   ```bash
+   unzip app-release.aar
+   cat META-INF/distribution.properties
+   ```
+5. **Verifica que tenga:** `distribution.source=jitpack`
+
+---
+
+## 🎯 Respuesta a tu pregunta
+
+**"¿Si un cliente descarga el SDK desde jitpack entonces el SDK enviará el valor 'jitpack' en el 'distribution'?"**
+
+✅ **SÍ**, automáticamente:
+
+- **Cuando JitPack compila**: Automáticamente inyectamos `distribution.source=jitpack` en el JAR
+- **El cliente descarga el AAR/JAR compilado**: Ya tiene el metadato dentro
+- **El SDK lee al inicializar**: Lee `META-INF/distribution.properties`
+- **En requests HTTP**: El SDK envía `X-Distribution-Source: jitpack`
+
+**Sin que el cliente haga nada adicional** ✨
+
+---
+
+## 📝 Archivos clave
+
+- `CheckoutExample/app/build.gradle` - Tarea de inyección + detección
+- `CheckoutExample/app/src/main/res/raw/distribution_config.properties` - Config template
+- `CheckoutExample/verify-distribution-metadata.sh` - Script de verificación
+- `build-distribution.sh` - Script auxiliar
+- `distribution.gradle` - Configuración de gradle reutilizable
+- `distribution-github.properties` - Config para GitHub
+- `distribution-jitpack.properties` - Config para JitPack
 
 Use the `build-distribution.sh` script to generate distribution-specific jars:
 
