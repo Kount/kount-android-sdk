@@ -60,6 +60,65 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 }
 
+// Task to inject distribution metadata into the SDK jar
+task injectDistributionMetadata {
+    doFirst {
+        def jarDir = file('../../KountDataCollector')
+        def jarFile = fileTree(dir: jarDir, include: '*.jar').singleFile
+        
+        if (!jarFile.exists()) {
+            println "Warning: SDK jar not found at ${jarFile}"
+            return
+        }
+        
+        def timestamp = System.currentTimeMillis()
+        def buildDir = file('build/tmp/distribution-injection')
+        def extractDir = new File(buildDir, 'extracted')
+        def metaInfDir = new File(extractDir, 'META-INF')
+        
+        // Clean and create directories
+        buildDir.deleteDir()
+        buildDir.mkdirs()
+        extractDir.mkdirs()
+        metaInfDir.mkdirs()
+        
+        // Extract jar
+        copy {
+            from zipTree(jarFile)
+            into extractDir
+        }
+        
+        // Create distribution properties file
+        def distributionProps = new File(metaInfDir, 'distribution.properties')
+        distributionProps.text = """# Kount Data Collector - Distribution Source Identification
+# Auto-generated during build
+
+distribution.source=${distributionSource}
+distribution.version=${version_name}
+build.timestamp=${timestamp}
+build.gradle.version=${gradle.gradleVersion}
+build.os=${System.getProperty('os.name')}
+"""
+        
+        // Backup original jar
+        def backupJar = new File(jarDir, jarFile.name.replace('.jar', '-original.jar'))
+        if (!backupJar.exists()) {
+            jarFile.renameTo(backupJar)
+        }
+        
+        // Recreate jar with distribution metadata
+        ant.jar(destfile: jarFile.absolutePath, basedir: extractDir.absolutePath)
+        
+        println "✓ Distribution metadata injected into SDK"
+        println "  Source: ${distributionSource}"
+        println "  Version: ${version_name}"
+        println "  Timestamp: ${timestamp}"
+        
+        // Clean temp directory
+        buildDir.deleteDir()
+    }
+}
+
 // Task to process distribution configuration file before build
 task processDistributionConfig {
     doFirst {
@@ -73,14 +132,13 @@ task processDistributionConfig {
             content = content.replace('${BUILD_TIMESTAMP}', timestamp.toString())
             
             configFile.text = content
-            println "Distribution Source Identifier: ${distributionSource}"
-            println "Build Timestamp: ${timestamp}"
+            println "Distribution Config: ${distributionSource}"
         }
     }
 }
 
-// Hook the task to run before preBuild
-preBuild.dependsOn processDistributionConfig
+// Hook tasks to run before preBuild
+preBuild.dependsOn injectDistributionMetadata, processDistributionConfig
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
