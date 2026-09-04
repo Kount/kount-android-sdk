@@ -89,13 +89,11 @@ task injectDistributionMetadata {
         def timestamp = System.currentTimeMillis()
         def buildDir = file('build/tmp/distribution-injection')
         def extractDir = new File(buildDir, 'extracted')
-        def metaInfDir = new File(extractDir, 'META-INF')
         
         // Clean and create directories
         buildDir.deleteDir()
         buildDir.mkdirs()
         extractDir.mkdirs()
-        metaInfDir.mkdirs()
         
         println "📦 JAR Location: ${jarFile.absolutePath}"
         println "📍 Processing: ${jarFile.name}"
@@ -108,8 +106,9 @@ task injectDistributionMetadata {
         
         println "✓ Extracted JAR successfully"
         
-        // Create distribution properties file
-        def distributionProps = new File(metaInfDir, 'distribution.properties')
+        // Create distribution properties file at the jar root (read at runtime via
+        // Class.getResourceAsStream("/distribution.properties") by DistributionSource.kt)
+        def distributionProps = new File(extractDir, 'distribution.properties')
         distributionProps.text = """# Kount Data Collector - Distribution Source Identification
 # Auto-generated during build
 
@@ -180,6 +179,13 @@ task processDistributionConfig {
 // Hook tasks to run before preBuild
 preBuild.dependsOn injectDistributionMetadata, processDistributionConfig
 
+// publish* tasks don't depend on preBuild, so without this, JitPack (which only
+// runs the publish task) would ship the jar with whatever distribution.properties
+// is already checked into git, ignoring the JITPACK env var entirely.
+tasks.matching { it.name.startsWith("publish") || it.name.startsWith("generatePomFile") }.configureEach {
+    dependsOn injectDistributionMetadata
+}
+
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation fileTree(dir: '../../KountDataCollector', include: ['*.jar'])
@@ -198,7 +204,6 @@ dependencies {
 repositories {
     mavenCentral()
     google()
-    jcenter()
     maven { url "https://jitpack.io" }
 }
 
