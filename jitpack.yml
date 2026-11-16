@@ -1,2 +1,4 @@
 jdk:
   - openjdk17
+install:
+  - cd CheckoutExample && ./gradlew clean :app:publishReleasePublicationToMavenLocal -Pgroup=com.github.Kount -Pversion=$VERSION -x test -x lint
