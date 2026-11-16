@@ -1,5 +1,15 @@
 # Android SDK Release Notes
 
+## 5.0.4
+
+* Fixed payload data structure.
+* Fixed some little bugs.
+
+## 5.0.3
+
+* Fixed BatteryInfoReceiver leak — Prevents memory leak that could occur on activity stop when battery status updates are received. The SDK now properly unregisters the BatteryInfoReceiver to avoid holding references to destroyed activities.
+* Compatibility: Maintained Android API 26 (Oreo) as minimum supported version; targeting Android 14/15 for compilation.
+
 ## 5.0.2
 * Fixed `IllegalStateException: Must be called on the UI thread` crash introduced in 5.0.1.
 * Removed the `com.google.android.gms:play-services-base` dependency.
@@ -7,7 +17,7 @@
 
 ## 5.0.1
 * Internal restructuring of error handling and enum classes; no public API changes.
-  * Known issue: could throw `IllegalStateException: Must be called on the UI thread` when `collectForSession()` was invoked from a background thread/dispatcher. Fixed in 5.0.2 (see above).
+* Known issue: could throw `IllegalStateException: Must be called on the UI thread` when `collectForSession()` was invoked from a background thread/dispatcher. Fixed in 5.0.2 (see above).
 
 ## 5.0.0
 * Renamed `KountSdk` to `KountSDK`.
@@ -28,7 +38,6 @@
 * Minimum Version on Android API: 21 (Lollipop)
 * Regex updated for client_id and session_id
 * Autogeneration of session_id when the field is null or empty
-
 
 ## 4.3.0
 * Added the new feature of Completion Handler. This feature can help you perform any action of your choice just after the DDC Data Collection completes. The needed actions can be performed in the completion block.
